@@ -1,21 +1,34 @@
-#include "engine.hpp"
 #include <iostream>
 
+#include "engine.hpp"
+
 int main(int argc, char** argv) {
-    if(!init()){
+    if (!init()) {
         std::cout << "Initialization failed!" << std::endl;
-    }else{
-        if(!loadMedia()){
+    } else {
+        if (!loadMedia()) {
             std::cout << "Filed to load media!" << std::endl;
-        }else{
-            //Apply the image
-            SDL_BlitSurface( gHelloWorld, nullptr, gScreenSurface, nullptr);
+        } else {
+            //Quit flag
+            bool quit = false;
+            //Event handler
+            SDL_Event e;
 
-            //Update the surface
-            SDL_UpdateWindowSurface(gWindow);
+            while (!quit) {
+                //Apply the image
+                SDL_BlitSurface(gHelloWorld, nullptr, gScreenSurface, nullptr);
 
-            //Waint two seconds
-            SDL_Delay(2000);
+                //Update the surface
+                SDL_UpdateWindowSurface(gWindow);
+
+                //Handle events on qeue
+                while (SDL_PollEvent(&e) != 0) {
+                    //User request quit
+                    if (e.type == SDL_QUIT) {
+                        quit = true;
+                    }
+                }
+            }
         }
     }
 
