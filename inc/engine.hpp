@@ -1,11 +1,12 @@
 #pragma once
 
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
 
 namespace Engine {
 //Screen dimension constants
-const int SCREEN_WIDTH = 509;
-const int SCREEN_HEIGHT = 900;
+const int SCREEN_WIDTH = 396;
+const int SCREEN_HEIGHT = 700;
 
 //Key press surfaces constants
 enum KeyPressSurfaces {
@@ -24,7 +25,7 @@ extern SDL_Window* gWindow;
 extern SDL_Surface* gScreenSurface;
 
 //The image we will load and show on the screen
-extern SDL_Surface* gHelloWorld;
+extern SDL_Surface* gBackGround;
 
 //Current displayed image
 extern SDL_Surface* gCurrentSurface;

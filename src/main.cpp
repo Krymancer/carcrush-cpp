@@ -44,7 +44,14 @@ int main(int argc, char** argv) {
                 }
 
                 //Apply the image
-                SDL_BlitSurface(Engine::gHelloWorld, nullptr, Engine::gScreenSurface, nullptr);
+                SDL_BlitSurface(Engine::gBackGround, nullptr, Engine::gScreenSurface, nullptr);
+
+                SDL_Rect stretchRect;
+                stretchRect.x = 0;
+                stretchRect.y = 0;
+                stretchRect.w = Engine::SCREEN_WIDTH;
+                stretchRect.h = Engine::SCREEN_HEIGHT;
+                SDL_BlitScaled(Engine::gKeyPressSurfaces[Engine::KEY_PRESS_SURFACE_DEFAULT], NULL, Engine::gScreenSurface, &stretchRect);
 
                 //Apply the current image
                 SDL_BlitSurface(Engine::gCurrentSurface, nullptr, Engine::gScreenSurface, nullptr);
