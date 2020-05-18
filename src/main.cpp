@@ -3,10 +3,10 @@
 #include "engine.hpp"
 
 int main(int argc, char** argv) {
-    if (!init()) {
+    if (!Engine::init()) {
         std::cout << "Initialization failed!" << std::endl;
     } else {
-        if (!loadMedia()) {
+        if (!Engine::loadMedia()) {
             std::cout << "Filed to load media!" << std::endl;
         } else {
             //Quit flag
@@ -14,26 +14,49 @@ int main(int argc, char** argv) {
             //Event handler
             SDL_Event e;
 
+            //Set default current surface
+            Engine::gCurrentSurface = Engine::gKeyPressSurfaces[Engine::KEY_PRESS_SURFACE_LEFT];
+
             while (!quit) {
-                //Apply the image
-                SDL_BlitSurface(gHelloWorld, nullptr, gScreenSurface, nullptr);
-
-                //Update the surface
-                SDL_UpdateWindowSurface(gWindow);
-
                 //Handle events on qeue
                 while (SDL_PollEvent(&e) != 0) {
-                    //User request quit
-                    if (e.type == SDL_QUIT) {
+                    if (e.type == SDL_QUIT) {  //User request quit
                         quit = true;
+                    } else if (e.type == SDL_KEYDOWN) {  //User press a key
+                        switch (e.key.keysym.sym) {
+                            case SDLK_UP:
+                                Engine::gCurrentSurface = Engine::gKeyPressSurfaces[Engine::KEY_PRESS_SURFACE_UP];
+                                break;
+                            case SDLK_DOWN:
+                                Engine::gCurrentSurface = Engine::gKeyPressSurfaces[Engine::KEY_PRESS_SURFACE_DOWN];
+                                break;
+                            case SDLK_LEFT:
+                                Engine::gCurrentSurface = Engine::gKeyPressSurfaces[Engine::KEY_PRESS_SURFACE_LEFT];
+                                break;
+                            case SDLK_RIGHT:
+                                Engine::gCurrentSurface = Engine::gKeyPressSurfaces[Engine::KEY_PRESS_SURFACE_RIGHT];
+                                break;
+                            default:
+                                Engine::gCurrentSurface = Engine::gKeyPressSurfaces[Engine::KEY_PRESS_SURFACE_DEFAULT];
+                                break;
+                        }
                     }
                 }
+
+                //Apply the image
+                SDL_BlitSurface(Engine::gHelloWorld, nullptr, Engine::gScreenSurface, nullptr);
+
+                //Apply the current image
+                SDL_BlitSurface(Engine::gCurrentSurface, nullptr, Engine::gScreenSurface, nullptr);
+
+                //Update the surface
+                SDL_UpdateWindowSurface(Engine::gWindow);
             }
         }
     }
 
-    close();
+    Engine::close();
 
-    std::cout << "Pass" << std::endl;
+    std::cout << "[PASS]" << std::endl;
     return 0;
 }

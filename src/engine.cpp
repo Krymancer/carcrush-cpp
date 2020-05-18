@@ -1,9 +1,25 @@
 #include "engine.hpp"
-#include <iostream>
 
-SDL_Window* gWindow = NULL;
-SDL_Surface* gScreenSurface = NULL;
-SDL_Surface* gHelloWorld = NULL;
+#include <iostream>
+#include <sstream>
+#include <time.h>
+
+namespace Engine {
+
+//The window we'll be rendering to
+SDL_Window* gWindow = nullptr;
+
+//The surface contained by the window
+SDL_Surface* gScreenSurface = nullptr;
+
+//The image we will load and show on the screen
+SDL_Surface* gHelloWorld = nullptr;
+
+//Current displayed image
+SDL_Surface* gCurrentSurface = nullptr;
+
+//The images that correspond to a keypress
+SDL_Surface* gKeyPressSurfaces[KEY_PRESS_SURFACE_TOTAL];
 
 bool init() {
     //Initialize SDL
@@ -26,27 +42,46 @@ bool init() {
 }
 
 bool loadMedia() {
-    //Load splash image
-    gHelloWorld = SDL_LoadBMP("./assets/street.bmp");
 
-    if (gHelloWorld == nullptr) {
-        std::cout << "Unable to load image "
-                  << "./assets/street.bmp"
-                  << "SDL_Error: " << SDL_GetError() << std::endl;
-        return false;
+    gHelloWorld = loadSurface("./assets/bmp/street.bmp");
+
+    gKeyPressSurfaces[KEY_PRESS_SURFACE_DEFAULT] = loadSurface("./assets/bmp/blue.bmp");
+    gKeyPressSurfaces[KEY_PRESS_SURFACE_UP] = loadSurface("./assets/bmp/gray.bmp");
+    gKeyPressSurfaces[KEY_PRESS_SURFACE_DOWN] = loadSurface("./assets/bmp/pink.bmp");
+    gKeyPressSurfaces[KEY_PRESS_SURFACE_LEFT] = loadSurface("./assets/bmp/purple.bmp");
+    gKeyPressSurfaces[KEY_PRESS_SURFACE_RIGHT] = loadSurface("./assets/bmp/green.bmp");
+
+    for(auto media : gKeyPressSurfaces){
+        if(media == nullptr) return false;
     }
 
     return true;
 }
 
-void close(){
+void close() {
     //Dealocate the surface
-    SDL_FreeSurface( gHelloWorld);
+    SDL_FreeSurface(gHelloWorld);
     gHelloWorld = nullptr;
-    
+
     //Destroy window
     SDL_DestroyWindow(gWindow);
 
     //Quit SDL subsystems
     SDL_Quit();
 }
+
+SDL_Surface* loadSurface(const char* path) {
+    //Load image at specified path
+    SDL_Surface* loadedSurface = SDL_LoadBMP(path);
+
+    if (loadedSurface == nullptr) {
+        std::cout << "Unable to load image "
+                  << path
+                  << " SDL_Error: " << SDL_GetError() << std::endl;
+        return nullptr;
+    }
+
+    return loadedSurface;
+}
+
+}  // namespace Engine
