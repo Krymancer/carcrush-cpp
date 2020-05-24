@@ -2,6 +2,8 @@
 
 #include "engine.hpp"
 
+void render();
+
 int main(int argc, char** argv) {
     if (!Engine::init()) {
         std::cout << "Initialization failed!" << std::endl;
@@ -14,43 +16,23 @@ int main(int argc, char** argv) {
             //Event handler
             SDL_Event e;
 
-            //Set default current surface
-            Engine::gCurrentSurface = Engine::gKeyPressSurfaces[Engine::KEY_PRESS_SURFACE_LEFT];
-
             while (!quit) {
                 //Handle events on qeue
                 while (SDL_PollEvent(&e) != 0) {
                     if (e.type == SDL_QUIT) {  //User request quit
                         quit = true;
                     } else if (e.type == SDL_KEYDOWN) {  //User press a key
-                        switch (e.key.keysym.sym) {
-                            case SDLK_UP:
-                                Engine::gCurrentSurface = Engine::gKeyPressSurfaces[Engine::KEY_PRESS_SURFACE_UP];
-                                break;
-                            case SDLK_DOWN:
-                                Engine::gCurrentSurface = Engine::gKeyPressSurfaces[Engine::KEY_PRESS_SURFACE_DOWN];
-                                break;
-                            case SDLK_LEFT:
-                                Engine::gCurrentSurface = Engine::gKeyPressSurfaces[Engine::KEY_PRESS_SURFACE_LEFT];
-                                break;
-                            case SDLK_RIGHT:
-                                Engine::gCurrentSurface = Engine::gKeyPressSurfaces[Engine::KEY_PRESS_SURFACE_RIGHT];
-                                break;
-                            default:
-                                Engine::gCurrentSurface = Engine::gKeyPressSurfaces[Engine::KEY_PRESS_SURFACE_DEFAULT];
-                                break;
-                        }
                     }
                 }
 
-                //Apply the image
-                SDL_BlitSurface(Engine::gBackGround, nullptr, Engine::gScreenSurface, nullptr);
+                //Clear screen
+                SDL_SetRenderDrawColor(Engine::gRenderer, 0xff, 0xff, 0xff, 0xff);
+                SDL_RenderClear(Engine::gRenderer);
 
-                //Apply the current image
-                SDL_BlitSurface(Engine::gCurrentSurface, nullptr, Engine::gScreenSurface, nullptr);
+                render();
 
-                //Update the surface
-                SDL_UpdateWindowSurface(Engine::gWindow);
+                //Update screen
+                SDL_RenderPresent(Engine::gRenderer);
             }
         }
     }
@@ -59,4 +41,35 @@ int main(int argc, char** argv) {
 
     std::cout << "[PASS]" << std::endl;
     return 0;
+}
+
+void render() {
+    //Render red filled square
+    SDL_Rect fillRect = {Engine::SCREEN_WIDTH / 4,
+                         Engine::SCREEN_HEIGHT / 4,
+                         Engine::SCREEN_WIDTH / 2,
+                         Engine::SCREEN_HEIGHT / 2};
+
+    SDL_SetRenderDrawColor(Engine::gRenderer, 0xff, 0x00, 0x00, 0xff);
+    SDL_RenderFillRect(Engine::gRenderer, &fillRect);
+
+    //Render green outline quad
+    SDL_Rect outLineRect = {Engine::SCREEN_WIDTH / 6,
+                            Engine::SCREEN_HEIGHT / 6,
+                            Engine::SCREEN_WIDTH * 2 / 3,
+                            Engine::SCREEN_HEIGHT * 2 / 3};
+
+    SDL_SetRenderDrawColor(Engine::gRenderer, 0x00, 0xff, 0x00, 0xff);
+    SDL_RenderDrawRect(Engine::gRenderer, &outLineRect);
+
+    //Draw blue horizontal line
+    SDL_SetRenderDrawColor(Engine::gRenderer, 0x00, 0x00, 0xff, 0xff);
+    SDL_RenderDrawLine(Engine::gRenderer, 0, Engine::SCREEN_HEIGHT / 2, Engine::SCREEN_WIDTH, Engine::SCREEN_HEIGHT / 2);
+
+    //Draw vertical line of yellow dots
+    SDL_SetRenderDrawColor(Engine::gRenderer, 0xff, 0xff, 0x00, 0xff);
+
+    for (int i = 0; i < Engine::SCREEN_WIDTH; i += 4) {
+        SDL_RenderDrawPoint(Engine::gRenderer, Engine::SCREEN_WIDTH / 2, i);
+    }
 }
