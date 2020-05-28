@@ -3,10 +3,12 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
+#include <engine/LTexture.hpp>
+
 namespace Engine {
 //Screen dimension constants
-const int SCREEN_WIDTH = 640;
-const int SCREEN_HEIGHT = 480;
+const int SCREEN_WIDTH = 396;
+const int SCREEN_HEIGHT = 700;
 
 //The window we'll be rendering to
 extern SDL_Window* gWindow;

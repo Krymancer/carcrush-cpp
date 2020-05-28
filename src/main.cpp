@@ -1,15 +1,21 @@
 #include <iostream>
 
-#include "engine.hpp"
+#include "engine/engine.hpp"
 
 void render();
+bool load();
+void close();
+
+LTexture bg;
+LTexture car;
 
 int main(int argc, char** argv) {
     if (!Engine::init()) {
         std::cout << "Initialization failed!" << std::endl;
     } else {
+        load();
         if (!Engine::loadMedia()) {
-            std::cout << "Filed to load media!" << std::endl;
+            std::cout << "Failed to load media!" << std::endl;
         } else {
             //Quit flag
             bool quit = false;
@@ -37,39 +43,27 @@ int main(int argc, char** argv) {
         }
     }
 
+    close();
     Engine::close();
 
     std::cout << "[PASS]" << std::endl;
     return 0;
 }
 
+bool load() {
+    bg.loadFromFile("./assets/png/bg.png");
+    car.loadFromFile("./assets/png/blue.png");
+
+    return true;
+}
+
 void render() {
-    //Render red filled square
-    SDL_Rect fillRect = {Engine::SCREEN_WIDTH / 4,
-                         Engine::SCREEN_HEIGHT / 4,
-                         Engine::SCREEN_WIDTH / 2,
-                         Engine::SCREEN_HEIGHT / 2};
+    bg.draw(0, 0);
+    car.draw(96, 540);
+    car.draw(10,10,10,10,30,30);
+}
 
-    SDL_SetRenderDrawColor(Engine::gRenderer, 0xff, 0x00, 0x00, 0xff);
-    SDL_RenderFillRect(Engine::gRenderer, &fillRect);
-
-    //Render green outline quad
-    SDL_Rect outLineRect = {Engine::SCREEN_WIDTH / 6,
-                            Engine::SCREEN_HEIGHT / 6,
-                            Engine::SCREEN_WIDTH * 2 / 3,
-                            Engine::SCREEN_HEIGHT * 2 / 3};
-
-    SDL_SetRenderDrawColor(Engine::gRenderer, 0x00, 0xff, 0x00, 0xff);
-    SDL_RenderDrawRect(Engine::gRenderer, &outLineRect);
-
-    //Draw blue horizontal line
-    SDL_SetRenderDrawColor(Engine::gRenderer, 0x00, 0x00, 0xff, 0xff);
-    SDL_RenderDrawLine(Engine::gRenderer, 0, Engine::SCREEN_HEIGHT / 2, Engine::SCREEN_WIDTH, Engine::SCREEN_HEIGHT / 2);
-
-    //Draw vertical line of yellow dots
-    SDL_SetRenderDrawColor(Engine::gRenderer, 0xff, 0xff, 0x00, 0xff);
-
-    for (int i = 0; i < Engine::SCREEN_WIDTH; i += 4) {
-        SDL_RenderDrawPoint(Engine::gRenderer, Engine::SCREEN_WIDTH / 2, i);
-    }
+void close() {
+    bg.free();
+    car.free();
 }

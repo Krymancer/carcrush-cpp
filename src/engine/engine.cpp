@@ -1,4 +1,5 @@
-#include "engine.hpp"
+#include <engine/engine.hpp>
+#include <engine/LTexture.hpp>
 
 #include <iostream>
 
@@ -50,6 +51,7 @@ bool init() {
 }
 
 bool loadMedia() {
+    //Load texture
     return true;
 }
 
@@ -63,65 +65,6 @@ void close() {
     //Quit SDL subsystems
     IMG_Quit();
     SDL_Quit();
-}
-
-SDL_Surface* loadSurface(const char* path) {
-    //Optimized surface
-    SDL_Surface* optimizedSurface = nullptr;
-
-    //Load image at specified path
-    SDL_Surface* loadedSurface = IMG_Load(path);
-
-    if (loadedSurface == nullptr) {
-        std::cout << "Unable to load image "
-                  << path
-                  << " SDL_Image_Error: " << IMG_GetError() << std::endl;
-        return nullptr;
-    } else {
-        //Convert surface to screen format
-        optimizedSurface = SDL_ConvertSurface(loadedSurface, gScreenSurface->format, 0);
-
-        if (optimizedSurface == nullptr) {
-            std::cout << "Unable to optimize image "
-                      << path
-                      << " SDL_Error: " << SDL_GetError() << std::endl;
-            return loadedSurface;
-        }
-
-        //Get rid of the old surface
-        SDL_FreeSurface(loadedSurface);
-    }
-
-    return optimizedSurface;
-}
-
-SDL_Texture* loadTexture(const char* path) {
-    //Final texture
-    SDL_Texture* newTexture = nullptr;
-
-    //Load image at specified path
-    SDL_Surface* loadedSurface = loadSurface(path);
-    if (loadSurface == nullptr) {
-        std::cout << "Unable to load image "
-                  << path
-                  << " SDL_Image_Error: " << IMG_GetError() << std::endl;
-        return nullptr;
-    } else {
-        //Create a texture from surface pixels
-        newTexture = SDL_CreateTextureFromSurface(gRenderer, loadedSurface);
-
-        if (newTexture == nullptr) {
-            std::cout << "Unable to create texture from "
-                      << path
-                      << " SDL_Error: " << SDL_GetError() << std::endl;
-            return nullptr;
-        }
-
-        //Get rid of the old surface
-        SDL_FreeSurface(loadedSurface);
-    }
-
-    return newTexture;
 }
 
 }  // namespace Engine
