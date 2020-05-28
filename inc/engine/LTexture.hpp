@@ -43,6 +43,25 @@ class LTexture {
     */
     void draw(int x, int y, int dx, int dy, int w, int h);
 
+    /**
+    * Tint the texture to determinade color
+    * 
+    * @param r Red
+    * @param g Green
+    * @param b Blue
+    */
+    void tint(Uint8 r, Uint8 g, Uint8 b);
+
+    /**
+    * Tint the texture to determinade color
+    * 
+    * @param r Red
+    * @param g Green
+    * @param b Blue
+    * @param a Alpha
+    */
+    void tint(Uint8 r, Uint8 g, Uint8 b, Uint8 a);
+
     /// Get the width of the texture
     int getWidth();
 

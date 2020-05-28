@@ -61,6 +61,7 @@ void render() {
     bg.draw(0, 0);
     car.draw(96, 540);
     car.draw(10,10,10,10,30,30);
+    car.tint(255,0,128,128);
 }
 
 void close() {
