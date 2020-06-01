@@ -28,7 +28,7 @@ bool init() {
             return false;
         } else {
             //Create renderer to window
-            gRenderer = SDL_CreateRenderer(gWindow, -1, SDL_RENDERER_ACCELERATED);
+            gRenderer = SDL_CreateRenderer(gWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC );
             if (gRenderer == nullptr) {
                 std::cout << "Renderer cloud not be created! SDL_Error: " << SDL_GetError() << std::endl;
                 return false;

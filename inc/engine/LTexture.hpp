@@ -32,7 +32,7 @@ class LTexture {
     void draw(int x, int y);
 
     /**
-    * Render texture at the given point
+    * Render part of the texture at the given point
     * 
     * @param x  The x-axis cordinate to place the top-left corner of the texure
     * @param y  The y-axis cordinate to place the top-left corner of the texure
@@ -44,6 +44,26 @@ class LTexture {
     void draw(int x, int y, int dx, int dy, int w, int h);
 
     /**
+    * Render a clip of the texture at the given point
+    * 
+    * @param x The x-axis cordinate to place the top-left corner of the texure
+    * @param y The y-axis cordinate to place the top-left corner of the texure
+    * @param clip The rect represset the cliped part of the texture
+    */
+    void draw(int x, int y, SDL_Rect* clip);
+
+    /**
+    * Render a clip of the texture at the given point
+    * 
+    * @param x The x-axis cordinate to place the top-left corner of the texure
+    * @param y The y-axis cordinate to place the top-left corner of the texure
+    * @param clip The rect represset the cliped part of the texture
+    * @param center The center point to rotate the texture
+    * @param flip Determine the flipping of the texture
+    */
+    void draw(int x, int y, double angle, SDL_Rect* clip, SDL_Point* center, SDL_RendererFlip flip);
+
+    /**
     * Tint the texture to determinade color
     * 
     * @param r Red
@@ -53,7 +73,7 @@ class LTexture {
     void tint(Uint8 r, Uint8 g, Uint8 b);
 
     /**
-    * Tint the texture to determinade color
+    * Tint the texture to determinade color and alpha
     * 
     * @param r Red
     * @param g Green
@@ -61,6 +81,20 @@ class LTexture {
     * @param a Alpha
     */
     void tint(Uint8 r, Uint8 g, Uint8 b, Uint8 a);
+
+    /**
+    * Set the alpha of a texture
+    * 
+    * @param a Alpha
+    */
+    void setAlpha(Uint8 a);
+
+    /**
+    * Set the blend mode of the texture
+    * 
+    * @param mode The specified mode to blend the texture
+    */
+    void setBlending(SDL_BlendMode mode);
 
     /// Get the width of the texture
     int getWidth();

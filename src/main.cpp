@@ -1,20 +1,21 @@
 #include <iostream>
 
 #include "engine/engine.hpp"
+#include "game/Player.hpp"
 
+bool loadMedia();
 void render();
-bool load();
 void close();
 
 LTexture bg;
-LTexture car;
+Player player;
 
 int main(int argc, char** argv) {
     if (!Engine::init()) {
         std::cout << "Initialization failed!" << std::endl;
     } else {
-        load();
-        if (!Engine::loadMedia()) {
+        // load();
+        if (!loadMedia()) {
             std::cout << "Failed to load media!" << std::endl;
         } else {
             //Quit flag
@@ -28,6 +29,16 @@ int main(int argc, char** argv) {
                     if (e.type == SDL_QUIT) {  //User request quit
                         quit = true;
                     } else if (e.type == SDL_KEYDOWN) {  //User press a key
+                        switch (e.key.keysym.sym) {
+                            case SDLK_LEFT:
+                                player.move(player.LETF);
+                                break;
+                            case SDLK_RIGHT:
+                                player.move(player.RIGHT);
+                                break;
+                            default:
+                                break;
+                        }
                     }
                 }
 
@@ -50,21 +61,20 @@ int main(int argc, char** argv) {
     return 0;
 }
 
-bool load() {
-    bg.loadFromFile("./assets/png/bg.png");
-    car.loadFromFile("./assets/png/blue.png");
+bool loadMedia() {
+    bool assetsStatus = true;
 
-    return true;
+    assetsStatus &= bg.loadFromFile("./assets/png/bg.png");
+    assetsStatus &= player.init();
+
+    return assetsStatus;
 }
 
 void render() {
     bg.draw(0, 0);
-    car.draw(96, 540);
-    car.draw(10,10,10,10,30,30);
-    car.tint(255,0,128,128);
+    player.show();
 }
 
 void close() {
     bg.free();
-    car.free();
 }

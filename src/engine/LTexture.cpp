@@ -78,13 +78,49 @@ void LTexture::draw(int x, int y, int dx, int dy, int w, int h) {
     SDL_RenderCopy(Engine::gRenderer, this->mTexture, &clip, &renderQuad);
 }
 
-void LTexture::tint(Uint8 r, Uint8 g, Uint8 b){
-    SDL_SetTextureColorMod(this->mTexture,r,g,b);
+void LTexture::draw(int x, int y, SDL_Rect* clip) {
+    //Set rendering space and render to screen
+    SDL_Rect renderQuad = {x, y, this->mWidth, this->mHeight};
+
+    //Set clip render dimensions
+    if (clip != nullptr) {
+        renderQuad.w = clip->w;
+        renderQuad.h = clip->h;
+    }
+
+    //Render to screen
+    SDL_RenderCopy(Engine::gRenderer, this->mTexture, clip, &renderQuad);
 }
 
-void LTexture::tint(Uint8 r, Uint8 g, Uint8 b, Uint8 a){
-    SDL_SetTextureColorMod(this->mTexture,r,g,b);
-    SDL_SetTextureAlphaMod(this->mTexture,a);
+void LTexture::draw(int x, int y, double angle, SDL_Rect* clip, SDL_Point* center, SDL_RendererFlip flip) {
+    //Set rendering space and render to screen
+    SDL_Rect renderQuad = {x, y, mWidth, mHeight};
+
+    //Set clip rendering dimensions
+    if (clip != nullptr) {
+        renderQuad.w = clip->w;
+        renderQuad.h = clip->h;
+    }
+
+    //Render to screen
+    SDL_RenderCopyEx(Engine::gRenderer, mTexture, clip, &renderQuad, angle, center, flip);
+}
+
+void LTexture::tint(Uint8 r, Uint8 g, Uint8 b) {
+    SDL_SetTextureColorMod(this->mTexture, r, g, b);
+}
+
+void LTexture::tint(Uint8 r, Uint8 g, Uint8 b, Uint8 a) {
+    SDL_SetTextureColorMod(this->mTexture, r, g, b);
+    SDL_SetTextureAlphaMod(this->mTexture, a);
+}
+
+void LTexture::setAlpha(Uint8 a) {
+    SDL_SetTextureAlphaMod(this->mTexture, a);
+}
+
+void LTexture::setBlending(SDL_BlendMode mode) {
+    SDL_SetTextureBlendMode(this->mTexture, mode);
 }
 
 int LTexture::getWidth() {
