@@ -1,5 +1,6 @@
 #include <engine/LTexture.hpp>
 #include <engine/engine.hpp>
+#include <game/Enemy.hpp>
 
 #pragma once
 
@@ -8,18 +9,18 @@ class Player {
     Player();
     ~Player();
 
-    /// Update method
-    void update();
-
-    /// Show the car texture
-    void show();
-
     /**
     *  Initilizate the texture
     * 
     *  @returns if the initialization was sucessfully
     */
     bool init();
+
+    /// Update method
+    void update();
+
+    /// Show the car texture
+    void show();
 
     /**
     *  Move the player in determinaded direction
@@ -28,7 +29,18 @@ class Player {
     */
     void move(int direction);
 
-    enum directions { LETF,RIGHT};
+    /**
+    *  Check if the player collides with a enemy
+    * 
+    *  @param enemy the enemy to check
+    * 
+    *  @returns true with collides
+    */
+    bool collide(Enemy &enemy);
+
+    /// Directions to use with the move function
+    enum directions { LETF,
+                      RIGHT };
 
    private:
     LTexture mTexture;

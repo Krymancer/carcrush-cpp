@@ -6,6 +6,7 @@
 #include <engine/LTexture.hpp>
 
 namespace Engine {
+
 //Screen dimension constants
 const int SCREEN_WIDTH = 396;
 const int SCREEN_HEIGHT = 700;
@@ -22,10 +23,22 @@ extern SDL_Renderer* gRenderer;
 //Start up SDL and creates window
 bool init();
 
-//Load a surface
+/**
+*   Load image from specified path
+* 
+*  @param path Path correspondent to image
+* 
+*  @returns Return the image as a surface
+*/
 SDL_Surface* loadSurface(const char* path);
 
-//Loads individual image as texture
+/**
+*   Load image from specified path
+* 
+*  @param path Path correspondent to image
+* 
+*  @returns Retuns the image as a texture
+*/
 SDL_Texture* loadTexture(const char* path);
 
 //Load the media
