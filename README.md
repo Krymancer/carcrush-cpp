@@ -6,7 +6,7 @@ A simple game using SDL2
 </p>
 
 ## Build
-You need `SDL2` and `SDL2-Image` instaled, then:
+You need `SDL2`, `SDL2_Image` and `SDL2_ttf` instaled, then:
 
     make
 
@@ -17,4 +17,4 @@ Simple run:
 
 
 ## Disclaimer
-I make this game to test [my simple neural network in cpp](https://github.com/Krymancer/neural-networks/blob/master/simple-neural-network/CPP/Makefile)
+I make this game to test [my simple neural network in cpp](https://github.com/Krymancer/neural-networks/blob/master/simple-neural-network/CPP/src/main.cpp)
