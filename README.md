@@ -5,12 +5,14 @@ A simple game using SDL2
   <img alt="CarCrush" src=".github/carcrush.png">
 </p>
 
-You need `SDL2` and `SDL2-Image` instaled
-
 ## Build
+You need `SDL2` and `SDL2-Image` instaled, then:
+
     make
 
 ## Run 
+Simple run:
+
     make run
 
 
