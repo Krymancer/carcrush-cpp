@@ -2,7 +2,7 @@
 A simple game using SDL2
 
 <p align="center">
-  <img alt="CarCrush" src=".github/carcrush.png" width="100%">
+  <img alt="CarCrush" src=".github/carcrush.png">
 </p>
 
 You need `SDL2` and `SDL2-Image` instaled
