@@ -8,7 +8,7 @@ BIN=bin/
 FLAGS=-std=c++11 -w -lSDL2 -lSDL2_image
 
 all: app
-	@./bin/app
+	@echo "Sucess"
 
 app: main.o engine.o
 	@$(CC) $(OBJ)* -o $(BIN)app $(FLAGS)

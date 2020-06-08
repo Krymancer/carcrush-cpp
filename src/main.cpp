@@ -108,13 +108,12 @@ void render() {
 void update() {
     player.update();
 
-    int i = 1;
-
     for (auto &enemy : enemies) {
-        std::cout << "Enemy: " << i++ << std::endl;
         enemy->update();
-        gameOver = player.collide(*enemy);
-        pause = true;
+        if(player.collide(*enemy)){
+            gameOver = true;
+            break;
+        }
     }
 }
 

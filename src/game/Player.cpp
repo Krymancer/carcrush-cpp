@@ -60,27 +60,10 @@ bool Player::collide(Enemy &enemy) {
     colliderEnemy[collider::TOP] = enemy.getY();
     colliderEnemy[collider::BOTTOM] = enemy.getY() + enemy.getHeight();
 
-    // Debug
-
-    std::cout << "collider Player " << std::endl
-              << "  LEFT: " << collidderPlayer[collider::LEFT] << std::endl
-              << "  RIGHT: " << collidderPlayer[collider::RIGHT] << std::endl
-              << "  TOP: " << collidderPlayer[collider::TOP] << std::endl
-              << "  BOTTOM: " << collidderPlayer[collider::BOTTOM] << std::endl;
-
-    std::cout << "collider Enemy " << std::endl
-              << "  LEFT: " << colliderEnemy[collider::LEFT] << std::endl
-              << "  RIGHT: " << colliderEnemy[collider::RIGHT] << std::endl
-              << "  TOP: " << colliderEnemy[collider::TOP] << std::endl
-              << "  BOTTOM: " << colliderEnemy[collider::BOTTOM] << std::endl;
-
-    std::cout << std::endl;
-
     if (collidderPlayer[collider::LEFT] != colliderEnemy[collider::LEFT]) {
         return false;
     } else if (collidderPlayer[collider::TOP] <= colliderEnemy[collider::BOTTOM]) {
         if (collidderPlayer[collider::BOTTOM] >= colliderEnemy[collider::TOP]) {
-            std::cout << "hit" << std::endl; // Debug
             return true;
         }
     }
