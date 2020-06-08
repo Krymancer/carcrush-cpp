@@ -1,4 +1,5 @@
 #include <iostream>
+#include <sstream>
 #include <vector>
 
 #include "engine/engine.hpp"
@@ -14,6 +15,8 @@ void restart();
 const int ENEMIESAMMOUNT = 3;
 bool gameOver = false;
 bool pause = false;
+
+LTexture gFPSTextTexture;
 
 LTexture bg;
 Player player;
@@ -31,6 +34,19 @@ int main(int argc, char **argv) {
             bool quit = false;
             //Event handler
             SDL_Event e;
+
+            //Set text color as black
+            SDL_Color textColor = {255, 255, 255, 255};
+
+            //The frames per second timer
+            LTimer fpsTimer;
+
+            //In memory text stream
+            std::stringstream timeText;
+
+            //Start counting frames per second
+            int countedFrames = 0;
+            fpsTimer.start();
 
             while (!quit) {
                 //Handle events on qeue
@@ -57,20 +73,37 @@ int main(int argc, char **argv) {
                     }
                 }
 
+                //Calculate and correct fps
+                float avgFPS = countedFrames / (fpsTimer.getTicks() / 1000.f);
+                if (avgFPS > 2000000) {
+                    avgFPS = 0;
+                }
+
+                //Set text to be rendered
+                timeText.str("");
+                timeText << "FPS: " << avgFPS;
+
+                //Render text
+                if (!gFPSTextTexture.loadFromRenderedText(timeText.str().c_str(), textColor)) {
+                    std::cout << "Unable to render FPS texture!" << std::endl;
+                }
+
                 if (!gameOver && !pause) {
                     // Update everything
                     update();
-
-                    // Clear screen
-                    SDL_SetRenderDrawColor(Engine::gRenderer, 0xff, 0xff, 0xff, 0xff);
-                    SDL_RenderClear(Engine::gRenderer);
-
-                    // Render everything
-                    render();
-
-                    //Update screen
-                    SDL_RenderPresent(Engine::gRenderer);
                 }
+
+                // Clear screen
+                SDL_SetRenderDrawColor(Engine::gRenderer, 0xff, 0xff, 0xff, 0xff);
+                SDL_RenderClear(Engine::gRenderer);
+
+                // Render everything
+                render();
+
+                //Update screen
+                SDL_RenderPresent(Engine::gRenderer);
+
+                ++countedFrames;
             }
         }
     }
@@ -84,6 +117,8 @@ int main(int argc, char **argv) {
 
 bool loadMedia() {
     bool assetsStatus = true;
+
+    assetsStatus &= Engine::loadMedia();
 
     assetsStatus &= bg.loadFromFile("./assets/png/bg.png");
     assetsStatus &= player.init();
@@ -103,6 +138,8 @@ void render() {
     for (auto &enemy : enemies) {
         enemy->show();
     }
+
+    gFPSTextTexture.draw(10, 25);
 }
 
 void update() {
@@ -110,7 +147,7 @@ void update() {
 
     for (auto &enemy : enemies) {
         enemy->update();
-        if(player.collide(*enemy)){
+        if (player.collide(*enemy)) {
             gameOver = true;
             break;
         }

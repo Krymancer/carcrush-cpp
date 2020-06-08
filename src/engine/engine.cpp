@@ -1,6 +1,5 @@
-#include <engine/engine.hpp>
 #include <engine/LTexture.hpp>
-
+#include <engine/engine.hpp>
 #include <iostream>
 
 namespace Engine {
@@ -13,6 +12,12 @@ SDL_Surface* gScreenSurface = nullptr;
 
 //The window renderer
 SDL_Renderer* gRenderer = nullptr;
+
+//Globally used font
+TTF_Font* gFont = nullptr;
+
+//Rendered texture
+LTexture gFPSTextTexture;
 
 bool init() {
     //Initialize SDL
@@ -28,7 +33,7 @@ bool init() {
             return false;
         } else {
             //Create renderer to window
-            gRenderer = SDL_CreateRenderer(gWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC );
+            gRenderer = SDL_CreateRenderer(gWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
             if (gRenderer == nullptr) {
                 std::cout << "Renderer cloud not be created! SDL_Error: " << SDL_GetError() << std::endl;
                 return false;
@@ -41,8 +46,14 @@ bool init() {
                     std::cout << "SDL_Image cloud not initalize! SDL_Image_Error: " << IMG_GetError() << std::endl;
                     return false;
                 } else {
-                    //Get screen surface
-                    gScreenSurface = SDL_GetWindowSurface(gWindow);
+                    //Initialize SDL_ttf
+                    if (TTF_Init() == -1) {
+                        std::cout << "SDL_ttf could not initialize! SDL_ttf Error: " << TTF_GetError() << std::endl;
+                        return false;
+                    } else {
+                        //Get screen surface
+                        gScreenSurface = SDL_GetWindowSurface(gWindow);
+                    }
                 }
             }
         }
@@ -51,11 +62,20 @@ bool init() {
 }
 
 bool loadMedia() {
-    //Load texture
+    //Open the font
+    gFont = TTF_OpenFont("./assets/font/Roboto-Regular.ttf", 20);
+    if (gFont == nullptr) {
+        std::cout << "Failed to load font! SDL_ttf Error: " << TTF_GetError() << std::endl;
+        return false;
+    }
     return true;
 }
 
 void close() {
+    //Free global font
+    TTF_CloseFont(gFont);
+    gFont = NULL;
+
     //Destroy window
     SDL_DestroyRenderer(gRenderer);
     SDL_DestroyWindow(gWindow);
@@ -63,6 +83,7 @@ void close() {
     gWindow = nullptr;
 
     //Quit SDL subsystems
+    TTF_Quit();
     IMG_Quit();
     SDL_Quit();
 }

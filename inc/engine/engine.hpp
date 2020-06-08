@@ -2,8 +2,10 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
 
 #include <engine/LTexture.hpp>
+#include <engine/LTimer.hpp>
 
 namespace Engine {
 
@@ -16,6 +18,9 @@ extern SDL_Window* gWindow;
 
 //The surface contained by the window
 extern SDL_Surface* gScreenSurface;
+
+//Globally used font
+extern TTF_Font *gFont;
 
 //The window renderer
 extern SDL_Renderer* gRenderer;

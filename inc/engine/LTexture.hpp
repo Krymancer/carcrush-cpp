@@ -20,6 +20,16 @@ class LTexture {
     */
     bool loadFromFile(const char* path);
 
+    /**
+    *   Load image from specified path
+    * 
+    *  @param textureText The text to render
+    *  @param textColor Color of the rendered text
+    * 
+    *  @returns Return true if the text texture as rendered sucessfully
+    */
+    bool loadFromRenderedText(const char* textureText, SDL_Color textColor);
+
     /// Dealocate the texture
     void free();
 
